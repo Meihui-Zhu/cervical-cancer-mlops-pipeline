@@ -23,3 +23,5 @@ MODELS_DIR = PROJECT_ROOT / "models"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 
 MODEL_PATH = MODELS_DIR / "biopsy_sparse_logistic_pipeline.joblib"
+
+DATABASE_PATH = PROJECT_ROOT / "data" / "pipeline.db"

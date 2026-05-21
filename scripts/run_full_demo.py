@@ -16,6 +16,7 @@ from src.config import (
     PREDICTIONS_DIR,
     MODELS_DIR,
     REPORTS_DIR,
+    DATABASE_PATH
 )
 
 
@@ -26,6 +27,10 @@ def clean_generated_outputs():
 
     This does not remove data/external/, which contains the original dataset.
     """
+    if DATABASE_PATH.exists():
+        DATABASE_PATH.unlink()
+        print(f"Removed existing database: {DATABASE_PATH}")
+
     output_dirs = [
         PROCESSED_DATA_DIR,
         PREDICTIONS_DIR,

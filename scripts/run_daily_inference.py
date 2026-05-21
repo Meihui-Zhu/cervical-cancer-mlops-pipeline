@@ -15,6 +15,13 @@ from src.config import (
     PROCESSED_DATA_DIR,
     PREDICTIONS_DIR,
 )
+
+from src.storage import (
+    initialize_database,
+    log_ingestion_batch,
+    save_predictions_to_database,
+)
+
 from src.data import split_features_target
 
 
@@ -48,6 +55,9 @@ def run_daily_inference(batch_date: str):
             f"No records found for date {batch_date}. "
             f"Available dates are: {available_dates}"
         )
+    
+    initialize_database()
+    log_ingestion_batch(batch_date, daily_batch)
 
     # Load fitted model pipeline
     model = joblib.load(MODEL_PATH)
@@ -63,7 +73,7 @@ def run_daily_inference(batch_date: str):
     # Build prediction output
     predictions_df = pd.DataFrame({
         "arrival_date": daily_batch["arrival_date"].values,
-        "record_id": daily_batch.index,
+        "record_id": daily_batch["record_id"].values,
         "biopsy_positive_probability": risk_scores,
         "predicted_label": predicted_labels,
         "true_biopsy_label": y_batch.values,
@@ -71,6 +81,7 @@ def run_daily_inference(batch_date: str):
 
     output_path = PREDICTIONS_DIR / f"predictions_{batch_date}.csv"
     predictions_df.to_csv(output_path, index=False)
+    save_predictions_to_database(predictions_df)
 
     print(f"Generated predictions for {batch_date}")
     print(f"Number of records: {len(predictions_df)}")

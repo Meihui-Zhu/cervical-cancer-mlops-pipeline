@@ -24,6 +24,9 @@ def load_dataset(path):
     # Convert all columns to numeric where possible
     df = df.apply(pd.to_numeric)
 
+    # Add a synthetic record identifier because the original dataset has no patient ID.
+    df.insert(0, "record_id", range(1, len(df) + 1))
+
     return df
 
 
@@ -81,6 +84,9 @@ def split_features_target(df):
     """
 
     X = df.drop(columns=TARGET_COLS, errors="ignore").copy()
+
+    # Drop synthetic record identifier
+    X = X.drop(columns=["record_id"], errors="ignore")
 
     # Remove metadata columns if present
     if "arrival_date" in X.columns:
