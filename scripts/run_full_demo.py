@@ -10,6 +10,7 @@ import shutil
 from src.config import PROCESSED_DATA_DIR, PREDICTIONS_DIR
 from scripts.run_training import main as run_training_main
 from scripts.run_daily_inference import run_daily_inference
+from scripts.run_drift_check import run_drift_check
 
 from src.config import (
     PROCESSED_DATA_DIR,
@@ -96,6 +97,7 @@ def main():
         print("-" * 80)
 
         run_daily_inference(batch_date)
+        run_drift_check(batch_date)
 
     print("\n" + "=" * 80)
     print("Full demo completed successfully.")
