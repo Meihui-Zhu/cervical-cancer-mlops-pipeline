@@ -138,17 +138,9 @@ python3 scripts/run_daily_inference.py --date 2026-05-08
 python3 scripts/run_daily_inference.py --date all
 ```
 
-Prediction outputs are saved under:
+Prediction outputs are saved under: `data/predictions/`
 
-```text
-data/predictions/
-```
-
-Predictions are also written to the SQLite database:
-
-```text
-data/pipeline.db
-```
+Predictions are also written to the SQLite database: `data/pipeline.db`
 
 
 ### 4. Run drift checks for one daily batch
@@ -165,9 +157,7 @@ python3 scripts/run_drift_check.py --date all
 
 Drift reports are saved under:
 
-```text
-reports/
-```
+`reports/`
 
 ### 6. Run optional drift stress test
 
