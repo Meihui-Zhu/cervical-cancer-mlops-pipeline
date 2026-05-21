@@ -245,7 +245,7 @@ The `predictions` table stores one row per model prediction, including the batch
 Example `predictions` row:
 
 | prediction_id | batch_date | record_id | biopsy_positive_probability | predicted_label | true_biopsy_label | model_version | created_at |
-|---:|---|---:|---:|---:|---:|---|
+|---:|---|---:|---:|---:|---:|---|---|
 | 1 | 2026-05-08 | 137 | 0.642 | 1 | 0 | sparse_logistic_v1 | 2026-05-21 21:31:12 |
 
 
