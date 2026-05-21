@@ -16,12 +16,8 @@ The prediction task is:
 
 > Predict whether a record has a positive biopsy result using given features. 
 
-The target variable is:
+The target variable is:`Biopsy`. 
 
-```text
-Biopsy
-```
-. 
 Other target variables in the dataset, including `Hinselmann`, `Schiller`, and `Citology`, are excluded from model features to avoid target leakage.
 
 
@@ -97,15 +93,15 @@ python3 scripts/run_full_demo.py
 
 This command will:
 
-1. clean generated outputs from previous runs;
-2. load the original UCI dataset;
-3. create a 70/30 stratified historical/future split using `Biopsy`;
-4. assign synthetic daily arrival dates to the future records;
-5. train and evaluate the final model on historical data;
-6. save the trained model;
-7. run inference for all simulated daily batches;
-8. save predictions to CSV files and SQLite;
-9. run drift monitoring for each daily batch.
+1. Clean generated outputs from previous runs;
+2. Load the original UCI dataset;
+3. Create a 70/30 stratified historical/future split using `Biopsy`;
+4. Assign synthetic daily arrival dates (from `2026-05-08` to `2026-05-21`) to the future records;
+5. Train and evaluate the final model on historical data;
+6. Save the trained model;
+7. Run inference for all simulated daily batches;
+8. Save predictions to CSV files and SQLite;
+9. Run drift monitoring for each daily batch.
 
 
 ## Run individual steps
@@ -185,6 +181,84 @@ The stress test artificially increases missingness in 6 variables:
 
 
 ## Model pipeline
-tbc
+The final model is a sparse logistic regression pipeline:
+
+```text
+raw input features
+→ missing value imputation
+→ missingness indicators
+→ scaling for numeric features
+→ L1-based feature selection
+→ class-weighted L2-based logistic regression classifier
+```
+
+The model uses:
+
+- Median imputation for numeric features;
+- Most-frequent imputation for binary features;
+- Missingness indicators to preserve information about missing values;
+- Class weighting to handle the rare positive biopsy outcome;
+- L1-based feature selection to reduce redundancy among correlated features;
+- A final logistic regression classifier for transparent baseline prediction.
+
+
+Model development compared several candidate approaches during exploration, including full logistic regression, sparse logistic regression, XGBoost, and Random Forest. The sparse logistic regression pipeline was selected because it gave the best balance of cross-validation performance, stability, interpretability, and simplicity for this small imbalanced dataset.
+
+
+## Storage design
+
+This project uses both flat files and a lightweight SQLite database.
+
+Flat files are used for:
+
+- the original public dataset;
+- generated historical/future split files;
+- prediction CSV files;
+- model;
+- evaluation and drift reports.
+
+SQLite is used for structured operational records that may need to be queried over time: `data/pipeline.db`.
+The database contains two tables:
+
+- ingestion_log
+- predictions
+
+The `ingestion_log` table records which daily batches were processed, how many records they contained, and whether processing completed successfully. 
+
+The `predictions` table stores one row per model prediction, including the batch date, synthetic record ID, predicted biopsy-positive probability, predicted label, true label for offline evaluation, and model version.
+
+
+## Drift monitoring
+
+The historical data is treated as the baseline distribution. Each incoming daily batch is compared against this baseline using:
+
+1. missingness drift;
+2. numeric feature mean-shift checks;
+3. prediction score drift.
+
+Missingness drift is flagged when the missing rate of a feature differs from the historical baseline by more than 20%.
+
+Numeric feature drift is flagged when the daily batch mean differs from the historical mean by more than two historical standard deviations.
+
+Prediction score drift compares daily predicted biopsy-positive probabilities against historical cross-validated prediction probabilities.
+
+In the default simulated daily batches, no major drift is expected because the historical and future records are sampled from the same source dataset. The optional stress test demonstrates that the monitoring module can flag a synthetic data-quality shift.
+
+## Notes on interpretation
+
+This project is an engineering demonstration, not a clinically deployable model.
+
+The dataset is small, static, and highly imbalanced. The biopsy-positive class is rare, so evaluation focuses on metrics such as ROC-AUC, average precision, recall, precision, F1-score, and confusion matrices rather than accuracy alone.
+
+Selected features and model coefficients are used only for model inspection. They should not be interpreted as causal effects or clinically validated risk factors.
+
+Diagnosis-related variables such as `Dx:HPV` and `Dx:CIN` are treated here as historical medical-record features. In a real screening deployment, their timing and availability would need to be verified carefully to avoid temporal leakage.
+
+
+## LicenseThe 
+
+code in this repository is released under the MIT License.
+
+The dataset is from the UCI Machine Learning Repository and is licensed under CC BY 4.0. See `data/external/README.md` for dataset attribution.
 
 

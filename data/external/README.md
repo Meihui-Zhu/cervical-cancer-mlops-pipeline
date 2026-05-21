@@ -29,4 +29,4 @@ This project uses the dataset as a public, reproducible proxy for a clinical scr
 
 Because the original dataset is static, the pipeline assigns synthetic arrival dates to the records and simulates daily screening batches. These simulated batches are used to demonstrate data ingestion, preprocessing, model training, inference, prediction storage, and drift monitoring in an end-to-end machine learning system.
 
-The local data file should be treated as an immutable external data source. Pipeline-generated files are stored separately under `data/raw/`, `data/processed/`, and `data/predictions/`.
+The local data file should be treated as an immutable external data source. Pipeline-generated files are stored separately under `data/processed/`, `data/predictions/`, and `data/pipeline.db`, 
