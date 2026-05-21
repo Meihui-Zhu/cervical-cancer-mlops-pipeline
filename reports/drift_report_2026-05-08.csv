@@ -1,0 +1,45 @@
+feature,drift_type,baseline_missing_rate,batch_missing_rate,absolute_difference,threshold,drift_flag,baseline_mean,batch_mean,baseline_std,std_multiplier,status
+Age,missingness,0.0,0.0,0.0,0.2,False,,,,,
+Number of sexual partners,missingness,0.028333333333333332,0.0,0.028333333333333332,0.2,False,,,,,
+First sexual intercourse,missingness,0.006666666666666667,0.0,0.006666666666666667,0.2,False,,,,,
+Num of pregnancies,missingness,0.06166666666666667,0.0,0.06166666666666667,0.2,False,,,,,
+Smokes,missingness,0.02,0.0,0.02,0.2,False,,,,,
+Smokes (years),missingness,0.02,0.0,0.02,0.2,False,,,,,
+Smokes (packs/year),missingness,0.02,0.0,0.02,0.2,False,,,,,
+Hormonal Contraceptives,missingness,0.145,0.0,0.145,0.2,False,,,,,
+Hormonal Contraceptives (years),missingness,0.145,0.0,0.145,0.2,False,,,,,
+IUD,missingness,0.15333333333333332,0.05263157894736842,0.1007017543859649,0.2,False,,,,,
+IUD (years),missingness,0.15333333333333332,0.05263157894736842,0.1007017543859649,0.2,False,,,,,
+STDs,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs (number),missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:condylomatosis,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:cervical condylomatosis,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:vaginal condylomatosis,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:vulvo-perineal condylomatosis,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:syphilis,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:pelvic inflammatory disease,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:genital herpes,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:molluscum contagiosum,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:AIDS,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:HIV,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:Hepatitis B,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs:HPV,missingness,0.13833333333333334,0.0,0.13833333333333334,0.2,False,,,,,
+STDs: Number of diagnosis,missingness,0.0,0.0,0.0,0.2,False,,,,,
+STDs: Time since first diagnosis,missingness,0.9116666666666666,0.9473684210526315,0.0357017543859649,0.2,False,,,,,
+STDs: Time since last diagnosis,missingness,0.9116666666666666,0.9473684210526315,0.0357017543859649,0.2,False,,,,,
+Dx:Cancer,missingness,0.0,0.0,0.0,0.2,False,,,,,
+Dx:CIN,missingness,0.0,0.0,0.0,0.2,False,,,,,
+Dx:HPV,missingness,0.0,0.0,0.0,0.2,False,,,,,
+Dx,missingness,0.0,0.0,0.0,0.2,False,,,,,
+Age,numeric_mean_shift,,,1.2627192982456137,16.536893207325036,False,26.841666666666665,25.57894736842105,8.268446603662518,2.0,evaluated
+Number of sexual partners,numeric_mean_shift,,,0.5466281484156361,2.8426416589727617,False,2.4939965694682678,1.9473684210526316,1.4213208294863808,2.0,evaluated
+First sexual intercourse,numeric_mean_shift,,,0.49947015188979194,5.682685168240056,False,17.026845637583893,17.526315789473685,2.841342584120028,2.0,evaluated
+Num of pregnancies,numeric_mean_shift,,,0.18593998317285232,2.8898958042130354,False,2.2877442273534636,2.473684210526316,1.4449479021065177,2.0,evaluated
+Smokes (years),numeric_mean_shift,,,0.2251400691648766,8.348377098938085,False,1.277771648112245,1.0526315789473684,4.174188549469043,2.0,evaluated
+Smokes (packs/year),numeric_mean_shift,,,0.1063345331420516,5.168814372783842,False,0.5300187436683674,0.42368421052631583,2.584407186391921,2.0,evaluated
+Hormonal Contraceptives (years),numeric_mean_shift,,,0.3464565312300192,6.657269590848602,False,2.148561794387914,1.8021052631578949,3.328634795424301,2.0,evaluated
+IUD (years),numeric_mean_shift,,,0.40641294838145225,3.8999663494184356,False,0.5380314960629922,0.9444444444444444,1.9499831747092178,2.0,evaluated
+STDs (number),numeric_mean_shift,,,0.02779191692965491,1.1281255676643072,False,0.18568665377176016,0.15789473684210525,0.5640627838321536,2.0,evaluated
+STDs: Time since first diagnosis,numeric_mean_shift,,,0.2075471698113205,12.29357862754772,False,6.7924528301886795,7.0,6.14678931377386,2.0,evaluated
+STDs: Time since last diagnosis,numeric_mean_shift,,,0.5849056603773581,11.96426706915961,False,6.415094339622642,7.0,5.982133534579805,2.0,evaluated
+STDs: Number of diagnosis,numeric_mean_shift,,,0.04070175438596492,0.6264793288460052,False,0.09333333333333334,0.05263157894736842,0.3132396644230026,2.0,evaluated
