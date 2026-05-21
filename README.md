@@ -218,6 +218,15 @@ Flat files are used for:
 - evaluation and drift reports.
 
 SQLite is used for structured operational records that may need to be queried over time: `data/pipeline.db`.
+Using a database here has several advantages over storing everything as separate CSV files:
+
+- It allows efficient filtering and aggregation by batch date, record ID, and model version. For example, the system can quickly summarise how many records were processed or predicted as positive within a given time window.
+
+- It better resembles how a hospital or screening system would store operational prediction records, where different users or downstream services may need to query the same records consistently.
+
+- It makes it easier to update or link delayed outcome information later. For example, if a definitive biopsy result becomes available after the initial prediction, the stored prediction record can be updated with the new label for subsequent evaluation.
+
+
 The database contains two tables:
 
 - ingestion_log
@@ -225,7 +234,19 @@ The database contains two tables:
 
 The `ingestion_log` table records which daily batches were processed, how many records they contained, and whether processing completed successfully. 
 
+Example `ingestion_log` row:
+
+| batch_date | n_records | n_positive_labels | positive_rate | status | created_at |
+|---|---:|---:|---:|---|---|
+| 2026-05-08 | 19 | 1 | 0.052632 | completed | 2026-05-21 21:31:12 |
+
 The `predictions` table stores one row per model prediction, including the batch date, synthetic record ID, predicted biopsy-positive probability, predicted label, true label for offline evaluation, and model version.
+
+Example `predictions` row:
+
+| prediction_id | batch_date | record_id | biopsy_positive_probability | predicted_label | true_biopsy_label | model_version | created_at |
+|---:|---|---:|---:|---:|---:|---|
+| 1 | 2026-05-08 | 137 | 0.642 | 1 | 0 | sparse_logistic_v1 | 2026-05-21 21:31:12 |
 
 
 ## Drift monitoring
@@ -253,12 +274,4 @@ The dataset is small, static, and highly imbalanced. The biopsy-positive class i
 Selected features and model coefficients are used only for model inspection. They should not be interpreted as causal effects or clinically validated risk factors.
 
 Diagnosis-related variables such as `Dx:HPV` and `Dx:CIN` are treated here as historical medical-record features. In a real screening deployment, their timing and availability would need to be verified carefully to avoid temporal leakage.
-
-
-## LicenseThe 
-
-code in this repository is released under the MIT License.
-
-The dataset is from the UCI Machine Learning Repository and is licensed under CC BY 4.0. See `data/external/README.md` for dataset attribution.
-
 
