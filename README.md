@@ -31,11 +31,7 @@ This project uses a local copy of the Cervical Cancer (Risk Factors) dataset fro
 - License: Creative Commons Attribution 4.0 International License (CC BY 4.0)
 
 
-The original raw data file is stored under:
-
-```text
-data/external/
-```
+The original raw data file is stored under: `data/external/`
 
 The dataset is included locally so that the full pipeline can be run without requiring network access.
 
