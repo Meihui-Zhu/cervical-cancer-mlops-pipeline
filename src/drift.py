@@ -91,6 +91,65 @@ def calculate_numeric_feature_drift(
     return pd.DataFrame(rows)
 
 
+
+def calculate_prediction_score_drift(
+    baseline_scores: pd.Series,
+    batch_scores: pd.Series,
+    std_multiplier: float = 2.0,
+) -> pd.DataFrame:
+    """
+    Compare model prediction score distribution between the historical baseline
+    and one incoming batch.
+
+    A drift flag is raised if the batch mean predicted probability differs from
+    the historical cross-validated mean by more than std_multiplier times the
+    historical standard deviation.
+    """
+    baseline_scores = pd.Series(baseline_scores).dropna()
+    batch_scores = pd.Series(batch_scores).dropna()
+
+    baseline_mean = baseline_scores.mean()
+    batch_mean = batch_scores.mean()
+    baseline_std = baseline_scores.std()
+
+    baseline_median = baseline_scores.median()
+    batch_median = batch_scores.median()
+
+    baseline_p90 = baseline_scores.quantile(0.90)
+    batch_p90 = batch_scores.quantile(0.90)
+
+    if pd.isna(baseline_std) or baseline_std == 0 or batch_scores.empty:
+        threshold_value = np.nan
+        absolute_difference = abs(batch_mean - baseline_mean) if not pd.isna(batch_mean) else np.nan
+        drift_flag = False
+        status = "not_evaluated"
+    else:
+        threshold_value = std_multiplier * baseline_std
+        absolute_difference = abs(batch_mean - baseline_mean)
+        drift_flag = absolute_difference > threshold_value
+        status = "evaluated"
+
+    return pd.DataFrame([{
+        "feature": "biopsy_positive_probability",
+        "drift_type": "prediction_score_shift",
+        "baseline_mean": baseline_mean,
+        "batch_mean": batch_mean,
+        "baseline_std": baseline_std,
+        "absolute_difference": absolute_difference,
+        "threshold": threshold_value,
+        "std_multiplier": std_multiplier,
+        "baseline_median": baseline_median,
+        "batch_median": batch_median,
+        "baseline_p90": baseline_p90,
+        "batch_p90": batch_p90,
+        "drift_flag": drift_flag,
+        "status": status,
+    }])
+
+
+
+
+
 def run_drift_checks(
     baseline_df: pd.DataFrame,
     batch_df: pd.DataFrame,

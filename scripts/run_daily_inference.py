@@ -96,6 +96,49 @@ def run_daily_inference(batch_date: str):
     return predictions_df
 
 
+def run_all_daily_inference() -> pd.DataFrame:
+    """
+    Run inference for all available simulated daily batches.
+    """
+    future_data_path = PROCESSED_DATA_DIR / "future_data_with_batches.csv"
+
+    if not future_data_path.exists():
+        raise FileNotFoundError(
+            f"{future_data_path} not found. Please run scripts/run_training.py first."
+        )
+
+    future_df = pd.read_csv(future_data_path)
+    batch_dates = sorted(future_df["arrival_date"].unique())
+
+    print(f"Found {len(batch_dates)} batch dates:")
+    print(batch_dates)
+
+    all_predictions = []
+
+    for batch_date in batch_dates:
+        print("\n" + "=" * 80)
+        print(f"Running inference for batch date: {batch_date}")
+        print("=" * 80)
+
+        predictions_df = run_daily_inference(batch_date)
+        all_predictions.append(predictions_df)
+
+    combined_predictions = pd.concat(all_predictions, ignore_index=True)
+
+    combined_output_path = PREDICTIONS_DIR / "predictions_all_batches.csv"
+    combined_predictions.to_csv(combined_output_path, index=False)
+
+    print("\n" + "=" * 80)
+    print("All daily inference runs completed.")
+    print(f"Combined predictions saved to: {combined_output_path}")
+    print("=" * 80)
+
+    return combined_predictions
+
+
+
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run inference for one simulated daily batch."
@@ -103,11 +146,14 @@ def main():
     parser.add_argument(
         "--date",
         required=True,
-        help="Arrival date to process, for example 2026-05-08 (YYYY-MM-DD).",
+        help="Arrival date to process, for example 2026-05-08 (YYYY-MM-DD), or 'all' to process all dates.",
     )
 
     args = parser.parse_args()
-    run_daily_inference(args.date)
+    if args.date.lower() == "all":
+        run_all_daily_inference()
+    else:
+        run_daily_inference(args.date)
 
 
 if __name__ == "__main__":

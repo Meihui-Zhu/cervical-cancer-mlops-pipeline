@@ -7,9 +7,9 @@ import sys
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from src.config import PROCESSED_DATA_DIR, REPORTS_DIR
+from src.config import PROCESSED_DATA_DIR, REPORTS_DIR, PREDICTIONS_DIR
 from src.data import split_features_target
-from src.drift import run_drift_checks
+from src.drift import run_drift_checks, calculate_prediction_score_drift
 from src.model import NUMERIC_FEATURES
 
 
@@ -50,6 +50,34 @@ def run_drift_check(batch_date: str) -> pd.DataFrame:
         missingness_threshold=0.20,
         std_multiplier=2.0,
     )
+
+
+
+    # Optional prediction score drift check
+    baseline_scores_path = REPORTS_DIR / "historical_cv_prediction_scores.csv"
+    predictions_path = PREDICTIONS_DIR / f"predictions_{batch_date}.csv"
+
+    if baseline_scores_path.exists() and predictions_path.exists():
+        baseline_scores_df = pd.read_csv(baseline_scores_path)
+        predictions_df = pd.read_csv(predictions_path)
+
+        score_drift_report = calculate_prediction_score_drift(
+            baseline_scores=baseline_scores_df["biopsy_positive_probability"],
+            batch_scores=predictions_df["biopsy_positive_probability"],
+            std_multiplier=2.0,
+        )
+
+        drift_report = pd.concat(
+            [drift_report, score_drift_report],
+            ignore_index=True,
+            sort=False,
+        )
+    else:
+        print(
+            "\nPrediction score drift skipped because baseline scores or daily predictions "
+            "were not found. Run training and daily inference first."
+        )
+
 
     Path(REPORTS_DIR).mkdir(parents=True, exist_ok=True)
 
@@ -127,7 +155,7 @@ def main():
     parser.add_argument(
         "--date",
         required=True,
-        help="Arrival date to process, for example 2026-05-08.",
+        help="Arrival date to process, for example 2026-05-08 (YYYY-MM-DD), or 'all' to process all dates.",
     )
 
     args = parser.parse_args()

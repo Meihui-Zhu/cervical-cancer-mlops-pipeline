@@ -1,7 +1,7 @@
-# scripts/run_training.py
-
 from pathlib import Path
 import sys
+
+from xgboost import cv
 
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
@@ -96,7 +96,6 @@ def main():
         cv=cv,
         method="predict",
     )
-
     cm = confusion_matrix(y_historical, y_pred_cv)
     cm_df = pd.DataFrame(
         cm,
@@ -104,22 +103,39 @@ def main():
         columns=["Predicted negative", "Predicted positive"],
     )
     cm_df.to_csv(REPORTS_DIR / "confusion_matrix_cv.csv")
-
     report = classification_report(
         y_historical,
         y_pred_cv,
         target_names=["Biopsy negative", "Biopsy positive"],
         digits=3,
     )
-
     with open(REPORTS_DIR / "classification_report_cv.txt", "w") as f:
         f.write(report)
-
     print("\nCross-validated confusion matrix:")
     print(cm_df)
-
     print("\nCross-validated classification report:")
     print(report)
+
+
+    # Cross-validated probabilities
+    y_proba_cv = cross_val_predict(
+            pipeline,
+            X_historical,
+            y_historical,
+            cv=cv,
+            method="predict_proba"
+        )[:, 1]
+    baseline_scores_df = pd.DataFrame({
+        "record_id": historical_df["record_id"].values,
+        "true_biopsy_label": y_historical.values,
+        "biopsy_positive_probability": y_proba_cv,
+    })
+
+    baseline_scores_df.to_csv(
+        REPORTS_DIR / "historical_cv_prediction_scores.csv",
+        index=False,
+    )
+
 
     # Fit final model on all historical data
     pipeline.fit(X_historical, y_historical)
