@@ -169,12 +169,7 @@ The stress test artificially increases missingness in 6 variables:
 The final model is a sparse logistic regression pipeline:
 
 
-raw input features
-→ missing value imputation
-→ missingness indicators
-→ scaling for numeric features
-→ L1-based feature selection
-→ class-weighted L2-based logistic regression classifier
+**Raw input features** → **missing value imputation** → **missingness indicators** → **numeric feature scaling** → **L1-based feature selection** → **class-weighted L2-regularized logistic regression classifier**
 
 
 The model uses:
