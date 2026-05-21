@@ -52,7 +52,6 @@ def run_drift_check(batch_date: str) -> pd.DataFrame:
     )
 
 
-
     # Optional prediction score drift check
     baseline_scores_path = REPORTS_DIR / "historical_cv_prediction_scores.csv"
     predictions_path = PREDICTIONS_DIR / f"predictions_{batch_date}.csv"
