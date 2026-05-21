@@ -1,0 +1,8 @@
+                 precision    recall  f1-score   support
+
+Biopsy negative      0.953     0.799     0.869       562
+Biopsy positive      0.124     0.421     0.192        38
+
+       accuracy                          0.775       600
+      macro avg      0.539     0.610     0.530       600
+   weighted avg      0.901     0.775     0.826       600
