@@ -114,16 +114,15 @@ python3 scripts/run_training.py
 
 This generates:
 
-```text
-models/biopsy_sparse_logistic_pipeline.joblib
-reports/cv_results_sparse_logistic.csv
-reports/confusion_matrix_cv.csv
-reports/classification_report_cv.txt
-reports/selected_feature_coefficients.csv
-reports/historical_cv_prediction_scores.csv
-data/processed/historical_data.csv
-data/processed/future_data_with_batches.csv
-```
+- models/biopsy_sparse_logistic_pipeline.joblib
+- reports/cv_results_sparse_logistic.csv
+- reports/confusion_matrix_cv.csv
+- reports/classification_report_cv.txt
+- reports/selected_feature_coefficients.csv
+- reports/historical_cv_prediction_scores.csv
+- data/processed/historical_data.csv
+- data/processed/future_data_with_batches.csv
+
 
 
 ### 2. Run inference for one daily batch
