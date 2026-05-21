@@ -170,11 +170,11 @@ The final model is a sparse logistic regression pipeline:
 
 
 raw input features
-1. missing value imputation
-2. missingness indicators
-3. scaling for numeric features
+1. Missing value imputation
+2. Missingness indicators
+3. Scaling for numeric features
 4. L1-based feature selection
-5. class-weighted L2-based logistic regression classifier
+5. Class-weighted L2-based logistic regression classifier
 
 
 The model uses:
