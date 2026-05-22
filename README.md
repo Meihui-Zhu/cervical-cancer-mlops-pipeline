@@ -66,6 +66,13 @@ cervical-cancer-mlops-pipeline/
 
 ## Setup
 
+Clone the repository and move to the project root directory:
+
+```bash
+git clone https://github.com/Meihui-Zhu/cervical-cancer-mlops-pipeline
+cd cervical-cancer-mlops-pipeline
+```
+
 Create and activate a virtual environment:
 
 ```bash
