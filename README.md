@@ -107,6 +107,23 @@ This command will:
 9. Run drift monitoring for each daily batch.
 
 
+### Optional: run the drift stress test
+
+The full demo runs drift monitoring on the normal simulated daily batches. In this stable scenario, no major drift is expected because the historical and future records come from the same source dataset.
+
+To verify that the drift monitoring logic can detect a clear data-quality shift, run the optional synthetic stress test:
+
+```bash
+python3 scripts/run_drift_stress_test.py
+```
+
+This script artificially increases missingness in selected variables and saves the stress-test drift report under:
+
+- `reports/drift_stress_test_missingness_2026-05-22.csv`
+
+This stress test is only used to demonstrate the drift detection logic and is not treated as real incoming data.
+
+
 ## Run individual steps
 
 ### 1. Train the model
