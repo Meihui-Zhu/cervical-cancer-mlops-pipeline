@@ -1,9 +1,6 @@
 from pathlib import Path
 import sys
 
-from xgboost import cv
-
-
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 
