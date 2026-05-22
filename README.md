@@ -60,6 +60,7 @@ cervical-cancer-mlops-pipeline/
 │   ├── drift.py                  # Drift monitoring functions
 │   └── storage.py                # SQLite logging and prediction storage
 ├── requirements.txt
+├── report.pdf                    # Detailed report explaining pipeline design and engineering 
 └── README.md
 ```
 
