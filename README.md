@@ -117,11 +117,13 @@ To verify that the drift monitoring logic can detect a clear data-quality shift,
 python3 scripts/run_drift_stress_test.py
 ```
 
-This script artificially increases missingness in selected variables and saves the stress-test drift report under:
+To simulate the situation where several questions in the survey questionnaire fail, this script artificially increases missingness in 6 selected variables:
+`Hormonal Contraceptives`, `Hormonal Contraceptives (years)`, `IUD`, `IUD (years)`, `STDs`, `STDs (number)`
+ and saves the stress-test drift report under:
 
 - `reports/drift_stress_test_missingness_2026-05-22.csv`
 
-This stress test is only used to demonstrate the drift detection logic and is not treated as real incoming data.
+The stress test artificially is designed to verify that the monitoring module can flag a data-quality shift. This is only a synthetic test and is not treated as real incoming data.
 
 
 ## Run individual steps
@@ -184,8 +186,7 @@ Drift reports are saved under:
 ```bash
 python3 scripts/run_drift_stress_test.py
 ```
-The stress test artificially increases missingness in 6 variables:
-`Hormonal Contraceptives`, `Hormonal Contraceptives (years)`, `IUD`, `IUD (years)`, `STDs`, `STDs (number)`, to simulate the situation where several questions in the survey questionnaire fail. To verify that the monitoring module can flag a data-quality shift. This is only a synthetic test and is not treated as real incoming data.
+
 
 
 
